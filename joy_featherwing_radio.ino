@@ -134,7 +134,7 @@ void loop() {
     }
     if (! (buttons & (1 << BUTTON_SEL))) {
       Serial.println("Button SEL pressed");
-      strncpy(radiopacket,"Button A",20);
+      strncpy(radiopacket,"Button SEL",20);
     }
   }
   
