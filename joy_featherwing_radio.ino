@@ -1,8 +1,5 @@
-
-
 #include <SPI.h>
 #include <RH_RF69.h>
-
 
 /************ Radio Setup ***************/
 
@@ -47,7 +44,7 @@ int16_t packetnum = 0;  // packet counter, we increment per xmission
 void setup() 
 {
   Serial.begin(115200);
-  //while (!Serial) { delay(1); } // wait until serial console is open, remove if not tethered to computer
+  while (!Serial) { delay(1); } // wait until serial console is open, remove if not tethered to computer
 
   pinMode(LED, OUTPUT);     
   pinMode(RFM69_RST, OUTPUT);
@@ -114,152 +111,57 @@ void loop() {
   }
   
   int mes = 0;
-  
+  char radiopacket[20] = "No value";
+
   if(!digitalRead(IRQ_PIN)){
     uint32_t buttons = ss.digitalReadBulk(button_mask);
     //Serial.println(buttons, BIN);
     if (! (buttons & (1 << BUTTON_RIGHT))) {
       Serial.println("Button A pressed");
-      char radiopacket[20] = "Button A";
-      itoa(packetnum++, radiopacket+13, 10);
-      Serial.print("Sending "); Serial.println(radiopacket);
-      // Send a message!
-      rf69.send((uint8_t *)radiopacket, strlen(radiopacket));
-      mes = 1;
-      delay(1000);  // Wait 1 second between transmits, could also 'sleep' here!
-      rf69.waitPacketSent();
-      // Now wait for a reply
-      uint8_t buf[RH_RF69_MAX_MESSAGE_LEN];
-      uint8_t len = sizeof(buf);
-    
-      if (rf69.waitAvailableTimeout(500))  { 
-        // Should be a reply message for us now   
-        if (rf69.recv(buf, &len)) {
-          Serial.print("Got a reply: ");
-          Serial.println((char*)buf);
-          Blink(LED, 50, 3); //blink LED 3 times, 50ms between blinks
-        } else {
-          Serial.println("Receive failed");
-        }
-      } else {
-        Serial.println("No reply, is another RFM69 listening?");
-      }
+      strncpy(radiopacket,"Button A",20);
     }
     if (! (buttons & (1 << BUTTON_DOWN))) {
       Serial.println("Button B pressed");
-      char radiopacket[20] = "Button B";
-      itoa(packetnum++, radiopacket+13, 10);
-      Serial.print("Sending "); Serial.println(radiopacket);
-      // Send a message!
-      rf69.send((uint8_t *)radiopacket, strlen(radiopacket));
-      mes = 2;
-      delay(1000);  // Wait 1 second between transmits, could also 'sleep' here!
-      rf69.waitPacketSent();
-      // Now wait for a reply
-      uint8_t buf[RH_RF69_MAX_MESSAGE_LEN];
-      uint8_t len = sizeof(buf);
-    
-      if (rf69.waitAvailableTimeout(500))  { 
-        // Should be a reply message for us now   
-        if (rf69.recv(buf, &len)) {
-          Serial.print("Got a reply: ");
-          Serial.println((char*)buf);
-          Blink(LED, 50, 3); //blink LED 3 times, 50ms between blinks
-        } else {
-          Serial.println("Receive failed");
-        }
-      } else {
-        Serial.println("No reply, is another RFM69 listening?");
-      }
+      strncpy(radiopacket,"Button B",20);
     }
     if (! (buttons & (1 << BUTTON_LEFT))) {
       Serial.println("Button Y pressed");
-      char radiopacket[20] = "Button Y";
-      itoa(packetnum++, radiopacket+13, 10);
-      Serial.print("Sending "); Serial.println(radiopacket);
-      // Send a message!
-      rf69.send((uint8_t *)radiopacket, strlen(radiopacket));
-      mes = 3;
-      delay(1000);  // Wait 1 second between transmits, could also 'sleep' here!
-      rf69.waitPacketSent();
-      // Now wait for a reply
-      uint8_t buf[RH_RF69_MAX_MESSAGE_LEN];
-      uint8_t len = sizeof(buf);
-    
-      if (rf69.waitAvailableTimeout(500))  { 
-        // Should be a reply message for us now   
-        if (rf69.recv(buf, &len)) {
-          Serial.print("Got a reply: ");
-          Serial.println((char*)buf);
-          Blink(LED, 50, 3); //blink LED 3 times, 50ms between blinks
-        } else {
-          Serial.println("Receive failed");
-        }
-      } else {
-        Serial.println("No reply, is another RFM69 listening?");
-      }
+      strncpy(radiopacket,"Button Y",20);
     }
     if (! (buttons & (1 << BUTTON_UP))) {
-      Serial.println("Button x pressed");
-      char radiopacket[20] = "Button X";
-      itoa(packetnum++, radiopacket+13, 10);
-      Serial.print("Sending "); Serial.println(radiopacket);
-      // Send a message!
-      rf69.send((uint8_t *)radiopacket, strlen(radiopacket));
-      mes = 4;
-      delay(1000);  // Wait 1 second between transmits, could also 'sleep' here!
-      rf69.waitPacketSent();
-      // Now wait for a reply
-      uint8_t buf[RH_RF69_MAX_MESSAGE_LEN];
-      uint8_t len = sizeof(buf);
-    
-      if (rf69.waitAvailableTimeout(500))  { 
-        // Should be a reply message for us now   
-        if (rf69.recv(buf, &len)) {
-          Serial.print("Got a reply: ");
-          Serial.println((char*)buf);
-          Blink(LED, 50, 3); //blink LED 3 times, 50ms between blinks
-        } else {
-          Serial.println("Receive failed");
-        }
-      } else {
-        Serial.println("No reply, is another RFM69 listening?");
-      }
+      Serial.println("Button X pressed");
+      strncpy(radiopacket,"Button X",20);    
     }
     if (! (buttons & (1 << BUTTON_SEL))) {
       Serial.println("Button SEL pressed");
-      char radiopacket[20] = "Button SEL";
-      itoa(packetnum++, radiopacket+13, 10);
-      Serial.print("Sending "); Serial.println(radiopacket);
-      // Send a message!
-      rf69.send((uint8_t *)radiopacket, strlen(radiopacket));
-      mes = 5;
-      delay(1000);  // Wait 1 second between transmits, could also 'sleep' here!
-      rf69.waitPacketSent();
-      // Now wait for a reply
-      uint8_t buf[RH_RF69_MAX_MESSAGE_LEN];
-      uint8_t len = sizeof(buf);
-    
-      if (rf69.waitAvailableTimeout(500))  { 
-        // Should be a reply message for us now   
-        if (rf69.recv(buf, &len)) {
-          Serial.print("Got a reply: ");
-          Serial.println((char*)buf);
-          Blink(LED, 50, 3); //blink LED 3 times, 50ms between blinks
-        } else {
-          Serial.println("Receive failed");
-        }
-      } else {
-        Serial.println("No reply, is another RFM69 listening?");
-      }
+      strncpy(radiopacket,"Button A",20);
     }
   }
   
-  
+  if (radiopacket != "No Value"){
+    itoa(packetnum++, radiopacket+13, 10);
+    Serial.print("Sending "); Serial.println(radiopacket);
+    rf69.send((uint8_t *)radiopacket, strlen(radiopacket));
+    mes = 1;
+    delay(1000);  // Wait 1 second between transmits, could also 'sleep' here!
+    rf69.waitPacketSent();
+    // Now wait for a reply
+    uint8_t buf[RH_RF69_MAX_MESSAGE_LEN];
+    uint8_t len = sizeof(buf);
 
-
-
-
+    if (rf69.waitAvailableTimeout(500))  { 
+      // Should be a reply message for us now   
+      if (rf69.recv(buf, &len)) {
+        Serial.print("Got a reply: ");
+        Serial.println((char*)buf);
+        Blink(LED, 50, 3); //blink LED 3 times, 50ms between blinks
+      } else {
+        Serial.println("Receive failed");
+      }
+    } else {
+      Serial.println("No reply, is another RFM69 listening?");
+    }
+  }
 }
 
 void Blink(byte PIN, byte DELAY_MS, byte loops) {
