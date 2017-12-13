@@ -1,4 +1,4 @@
-/ rf69 demo tx rx.pde
+// rf69 demo tx rx.pde
 // -*- mode: C++ -*-
 // Example sketch showing how to create a simple messageing client
 // with the RH_RF69 class. RH_RF69 class does not provide for addressing or
@@ -87,27 +87,28 @@ void loop() {
       Serial.println((char *)buf);
       Serial.print("RSSI: ");
       Serial.println(rf69.lastRssi(), DEC);
-
-      //if (strstr((char *)buf, "d")) {
-        // Send a reply!
-        uint8_t data[] = "And hello back to you";
-        rf69.send(data, sizeof(data));
-        rf69.waitPacketSent();
-        Serial.println("Sent a reply");
-        Blink(LED, 40, 3); //blink LED 3 times, 40ms between blinks
-     // }
-    } else {
+    } 
+      else if (strstr((char *)buf, "d")) {
+      Serial.println("Send a reply!");
+      uint8_t data[] = "And hello back to you";
+      rf69.send(data, sizeof(data));
+      rf69.waitPacketSent();
+      Serial.println("Sent a reply");
+      //Blink(LED, 40, 3); //blink LED 3 times, 40ms between blinks
+      }
+    else {
       Serial.println("Receive failed");
     }
   }
 }
+    
 
-
-void Blink(byte PIN, byte DELAY_MS, byte loops) {
-  for (byte i=0; i<loops; i++)  {
-    digitalWrite(PIN,HIGH);
-    delay(DELAY_MS);
-    digitalWrite(PIN,LOW);
-    delay(DELAY_MS);
-  }
-}
+//
+//void Blink(byte PIN, byte DELAY_MS, byte loops) {
+//  for (byte i=0; i<loops; i++)  {
+//    digitalWrite(PIN,HIGH);
+//    delay(DELAY_MS);
+//    digitalWrite(PIN,LOW);
+//    delay(DELAY_MS);
+//  }
+//}
